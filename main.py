@@ -61,16 +61,32 @@ for season, group in grouped_season:
 # якщо є то яку частину прибутку вони становлять,
 # на скільки відсотків вони підвищують прибуток магазину
 
-def check_for_holiday_flag(group, season_median):
-    holiday_sales = df[df['Holiday_Flag'] == 1]['Weekly_Sales']
-    if not holiday_sales.empty:
-        holiday_median=holiday_sales.median()
-        holiday_share = holiday_sales/season_median
-        increase_percentage = ((holiday_median - season_median)/season_median)* 100
-        return holiday_share, increase_percentage
-    else:
-        return 0,0
+def check_for_holiday_flag(group, season_total_sales):
+    holiday_sales = group[group['Holiday_Flag'] == 1]['Weekly_Sales']
 
+    if not holiday_sales.empty:
+        holiday_total=holiday_sales.sum()
+        holiday_share = holiday_total/season_total_sales
+        increase_percentage = ((holiday_total - season_total_sales)/season_total_sales)* 100
+
+        if increase_percentage > 0:
+            result = 'Holiday sales increase overall profits'
+        elif increase_percentage < 0:
+            result = 'Holiday sales reduce overall profits'
+        else:
+            result = 'Holiday sales have no impact on overall profits'
+
+        increase_percentage_round = round(increase_percentage, 2)
+        
+        print("Holiday Sales Analysis:")
+        print(f"- The share of sales during holidays: {holiday_share:.2%}")
+        print(f"- {result}. Overall profit change: {increase_percentage_round} %")
+    else:
+        print('No holiday sales in this season.')
+        
+#так застосовуємо цю функцію, яка виводить розрахунок святкових продажів від медіани
+season_total_sales = grouped_season.get_group('Winter')['Weekly_Sales'].sum()
+print(check_for_holiday_flag(grouped_season.get_group('Winter'), season_total_sales))
 
 
 
