@@ -16,6 +16,7 @@ from scipy.stats import ttest_ind
 df = pd.read_csv('Walmart.csv')
 #df_products = pd.read_csv('')
 
+#
 # check the data in table
 # print(df.head)
 # print(df.shape)
