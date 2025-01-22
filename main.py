@@ -127,16 +127,16 @@ def to_check_the_season(season):
 
 #visualisation 
 
-def plot_sales_by_season(season, total_sales):
-    if total_sales>0:
-        plt.figure(figsize= (12,6))
-        plt.bar([season], [total_sales], color = 'b')
-        plt.title(f'Sales in {season}')
-        plt.xlabel('Season')
-        plt.ylabel('Total Sales')
-        plt.show()
-    else:
-        print(f'No sales data available for {season}.')
+# def plot_sales_by_season(season, total_sales):
+#     if total_sales>0:
+#         plt.figure(figsize= (12,6))
+#         plt.bar([season], [total_sales], color = 'b')
+#         plt.title(f'Sales in {season}')
+#         plt.xlabel('Season')
+#         plt.ylabel('Total Sales')
+#         plt.show()
+#     else:
+#         print(f'No sales data available for {season}.')
 
 season = input(str('Enter a season of the year ->   '))
 
@@ -162,50 +162,25 @@ if season in seasonal_holiday_sales:
         print(f'- No holiday sales in the {season} season.')
 
     #sales visualisation
-    plot_sales_by_season(season, total_sales)
+    #plot_sales_by_season(season, total_sales)
 
 else:
     print('Invalid season name. Please enter one of the following: Winter, Summer, Autumn, Spring.')
 
 
-
-
-
-
-
-
-
-
-
-
-
-#цей блок коду робить візуалізацію для дати та кількості продажів 21.01.25
-#-----------------------------------------------------------------------------
-#function for formating Y(present numbers withiut scientiestic notation)
-# def millions(x, pos):
-#     return f'{int(x/1e6)}M'
-# formatter = FuncFormatter(millions)
+# в наступному блоці коду бдемо аналізувати які продукти продаються найкраще в якому сезоні
 #
-# #print(df.to_string())
 #
-# x = df['Date']
-# y = df['Weekly_Sales']
-#
-# plt.figure(figsize=(12,6))
-# plt.bar(x, y, label ='Weekly Sales')
-#
-# plt.title('Sales')
-# plt.xlabel('Season')
-# plt.ylabel('Weekly Sales')
-#
-# plt.gca().yaxis.set_major_formatter(formatter)
-#
-# plt.xticks(rotation = 45)
-# plt.ylim(0,y.max()*1.1)
-# plt.legend()
-# plt.tight_layout()
-# plt.show()
-#-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 
