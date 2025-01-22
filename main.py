@@ -72,54 +72,45 @@ for season, group in grouped_season:
 # на скільки відсотків вони підвищують прибуток магазину
 
 def check_for_holiday_flag(group, season_total_sales):
+    # Calculation of the share of holiday sales    
     holiday_sales = group[group['Holiday_Flag'] == 1]['Weekly_Sales']
     non_holiday_sales = group[group['Holiday_Flag'] == 0]['Weekly_Sales']
 
     if not holiday_sales.empty:
-        holiday_total=holiday_sales.sum()
+        # Calculation of the share of holiday sales
+        holiday_total = holiday_sales.sum()
         holiday_share = holiday_total/season_total_sales
-        increase_percentage = ((holiday_total - season_total_sales)/season_total_sales)* 100
+        increase_percentage = (holiday_total - season_total_sales)* 100
 
-        if increase_percentage > 0:
-            result = 'Holiday sales increase overall profits'
-        elif increase_percentage < 0:
-            result = 'The profit of the store does not change'
-        else:
-            result = 'Holiday sales have no impact on overall profits'
+        result = 'Holiday sales increase overall profits' if increase_percentage > 0 else 'Holiday sales have no impact on overall profits'
 
         increase_percentage_round = round(increase_percentage, 2)
-        
-        print("Holiday Sales Analysis:")
-        print(f"- The share of sales during holidays: {holiday_share:.2%}")
-        print(f"- {result}: {increase_percentage_round}%")
 
         # Виконання t-тесту
+        t_stat, p_value = (None, None)
         if not non_holiday_sales.empty:
             t_stat, p_value = ttest_ind(holiday_sales, non_holiday_sales, equal_var=False)
 
-            print("\nT-Test Analysis:")
-            print(f"- T-statistic: {t_stat:.2f}")
-            print(f"- P-value: {p_value:.4f}")
 
-            # Інтерпретація результату
-            alpha = 0.05  # Рівень значущості
-            if p_value < alpha:
-                print("There is a statistically significant difference between holiday and non-holiday sales.")
-            else:
-                print("There is no statistically significant difference between holiday and non-holiday sales.")
-        else:
-            print("\nNo non-holiday sales available for comparison.")
+        return {
+            "share": round(holiday_share, 2),
+            "profit_change": f"{increase_percentage_round}%",
+            "result": result,
+            "t_stat": round(t_stat, 2) if t_stat is not None else None,
+            "p_value": round(p_value, 4) if p_value is not None else None
+        }
     else:
-        print('No holiday sales in this season.')
+        return None
 
         
-# ініціалізуємо словник для збереженнярезультатів
+# ініціалізуємо словник для збереження результатів
 seasonal_holiday_sales = {}
 
-winter_holiday_sales = check_for_holiday_flag(grouped_season.get_group('Winter'), winter_total_sales)
-summer_holiday_sales = check_for_holiday_flag(grouped_season.get_group('Summer'), summer_total_sales)
-autumn_holiday_sales = check_for_holiday_flag(grouped_season.get_group('Autumn'), autumn_total_sales)
-spring_holiday_sales = check_for_holiday_flag(grouped_season.get_group('Spring'), spring_total_sales)
+seasons = ['Winter', 'Summer', 'Autumn', 'Spring']
+totals = [winter_total_sales, summer_total_sales, autumn_total_sales, spring_total_sales]
+
+for season, total in zip(seasons, totals):
+    seasonal_holiday_sales[season] = check_for_holiday_flag(grouped_season.get_group(season), total)
 
 def to_check_the_season(season):
     for season, analysis in seasonal_holiday_sales.items():
@@ -127,39 +118,57 @@ def to_check_the_season(season):
         if analysis:
             print(f"- The share of sales during holidays: {analysis['share']}")
             print(f"- {analysis['result']}: {analysis['profit_change']}")
+            if analysis['t_stat'] is not None:
+                print(f"T-Test Analysis:")
+                print(f"- T-statistic: {analysis['t_stat']}")
+                print(f"- P-value: {analysis['p_value']}")
+        else:
+            print("- No holiday sales in this season.")
+
+#visualisation 
+
+def plot_sales_by_season(season, total_sales):
+    if total_sales>0:
+        plt.figure(figsize= (12,6))
+        plt.bar([season], [total_sales], color = 'b')
+        plt.title(f'Sales in {season}')
+        plt.xlabel('Season')
+        plt.ylabel('Total Sales')
+        plt.show()
+    else:
+        print(f'No sales data available for {season}.')
+
+season = input(str('Enter a season of the year ->   '))
+
+# Перевірка, чи введений сезон є в доступному списку
+if season in seasonal_holiday_sales:
+    analysis = seasonal_holiday_sales[season]
+    total_sales = {
+        'Winter': winter_total_sales,
+        'Summer': summer_total_sales,
+        'Autumn': autumn_total_sales,
+        'Spring': spring_total_sales
+    }[season]
+
+    if analysis:
+        print(f'{season} Holiday Sales Analysis:')
+        print(f"- The share of sales during holidays: {analysis['share']}")
+        print(f"- {analysis['result']}: {analysis['profit_change']}")
+        if analysis['t_stat'] is not None:
             print(f"T-Test Analysis:")
             print(f"- T-statistic: {analysis['t_stat']}")
             print(f"- P-value: {analysis['p_value']}")
-        else:
-            print("- No holiday sales in this season.")
-        print("***")
+    else:
+        print(f'- No holiday sales in the {season} season.')
 
-print(to_check_the_season(summer_total_sales))
+    #sales visualisation
+    plot_sales_by_season(season, total_sales)
 
-#print(check_for_holiday_flag(grouped_season.get_group('Winter'), season_total_sales))
+else:
+    print('Invalid season name. Please enter one of the following: Winter, Summer, Autumn, Spring.')
 
-'''Conclusions of the Analysis:
 
-1. **Share of Sales During Holidays**:  
-    Only 15.71% of the total seasonal sales occur during holidays.
-    This indicates that holidays are not a major driver of revenue for the store.
 
-2. **Overall Profit Change**:  
-   Sales during holidays reduce overall profits by 84.29%.
-   This suggests that the sales volumes on holidays are significantly lower than the average sales for the entire season.
-
-3. **T-Test Results**:  
-   - The **T-statistic (-1.82)** and **P-value (0.0691)** indicate that the difference 
-   between holiday and non-holiday sales **is not statistically significant**.  
-   - Since the P-value exceeds the commonly used significance level (α = 0.05), 
-   we cannot confidently conclude that holidays have a significant impact on sales volumes.
-
-### Main Conclusion:  
-Holidays during the analyzed season are not a key driver of sales for the store. 
-The sales volumes on these days are significantly lower than the overall seasonal average, 
-but the difference is not statistically significant. This may imply that holiday promotions 
-or strategies are not delivering the expected results, or customers do not consider this period 
-as a time for active shopping.'''
 
 
 
