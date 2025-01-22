@@ -14,7 +14,7 @@ from scipy.stats import ttest_ind
 # from statsmodels.tsa.arima.model import ARIMA
 
 df = pd.read_csv('Walmart.csv')
-df_products = pd.read_csv('')
+#df_products = pd.read_csv('')
 
 # check the data in table
 # print(df.head)
