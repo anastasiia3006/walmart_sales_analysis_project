@@ -1,11 +1,50 @@
- 0   Store         - магазин в якому продукти
- 1   Date          - дата в яку були зроблені покупки
- 2   Weekly_Sales  - сума продажів за цілий тиждень
- 3   Holiday_Flag  - позначки вихідних
- 4   Temperature   - температура в регіоні
- 5   Fuel_Price    - ціна без знижок
- 6   CPI           - Індекс цін клієнтів
- 7   Unemployment  - рівень безробіття регіону даного магазину(коли високий рівень безробіття - низький рівень продажів)
+-----DESCTIPTION-OF-THE-DATABASE----
+
+Store: ------------ Магазин, де продається продукт.
+Date: ------------  Дата покупки.
+Weekly_Sales: ----- Продажі за тиждень.
+Holiday_Flag: ----- Вихідні дні.
+Temperature: ------ Температура в регіоні.
+Fuel_Price: ------- Ціна пального.
+CPI: -------------- Індекс цін для клієнтів.
+Unemployment: ----- Рівень безробіття в регіоні.
+PRODUCT_NAME: ----- Назва продукту.
+DEPARTMENT: ------- Відділ продукту.
+CATEGORY:Категорія продукту.
+SKU: Ідентифікатор продукту.
+SELLER: Продавець товару.
+BRAND: Бренд продукту.
+PRICE_CURRENT: Поточна ціна.
+PRICE_RETAIL: Роздрібна ціна.
+REVIEW_COUNT: Кількість відгуків.
+REVIEW_RATING: Рейтинг відгуків.
+RunDate: Дата збору даних.
+
+
+Data columns (total 19 columns):
+ #   Column         Non-Null Count  Dtype         
+---  ------         --------------  -----         
+ 0   Store          1130 non-null   int64         
+ 1   Date           1130 non-null   datetime64[ns]
+ 2   Weekly_Sales   1130 non-null   float64       
+ 3   Holiday_Flag   1130 non-null   int64         
+ 4   Temperature    1130 non-null   float64       
+ 5   Fuel_Price     1130 non-null   float64       
+ 6   CPI            1130 non-null   float64       
+ 7   Unemployment   1130 non-null   float64       
+ 8   PRODUCT_NAME   1130 non-null   object        
+ 9   DEPARTMENT     1130 non-null   object        
+ 10  CATEGORY       1130 non-null   object        
+ 11  SKU            1130 non-null   int64         
+ 12  SELLER         1130 non-null   object        
+ 13  BRAND          1130 non-null   object        
+ 14  PRICE_CURRENT  1130 non-null   float64       
+ 15  PRICE_RETAIL   1130 non-null   float64       
+ 16  REVIEW_COUNT   1130 non-null   int64         
+ 17  REVIEW_RATING  1130 non-null   float64       
+ 18  RunDate        1130 non-null   datetime64[ns]
+dtypes: datetime64[ns](2), float64(8), int64(4), object(5)
+memory usage: 167.9+ KB
 
 
 1
@@ -32,7 +71,7 @@
   2
   Які продукти продаються найкраще?
 
-  - тут робимо аналіз на основі колонок: одну з колонок додаємо, оскільки в нас немає продуктів в цій колонці
+  - тут робимо аналіз на основі колонок: 
         інша колонка Weekly_Sales
  - можна за продажами кожного тижня в сезоні отримати результат продукту який найбільше і анйчастіше купують
  - далі сортуємо товари які найбфльше купують(від найбфльш високої кількості продажу до низької)

@@ -9,14 +9,11 @@ from matplotlib.ticker import FuncFormatter
 # import datetime
 from scipy.stats import ttest_ind
 
-# from statsmodels.tools.sequences import primes_from_2_to
-# from statsmodels.tsa.statespace.sarimax import SARIMAX
-# from statsmodels.tsa.arima.model import ARIMA
+#add db walmart with list of products
 
-df = pd.read_csv('Walmart.csv')
-#df_products = pd.read_csv('')
+df = pd.read_excel('walmart_productts.xlsx')
+df.to_csv('walmart_products.csv', index = False)
 
-#
 # check the data in table
 # print(df.head)
 # print(df.shape)
@@ -24,6 +21,15 @@ df = pd.read_csv('Walmart.csv')
 # print(df.describe())
 # print(df.isnull().sum())
 # print(df.dtypes)
+
+df['SELLER'] = df['SELLER'].fillna('Unknown')
+df['BRAND'] = df['BRAND'].fillna('Unknown')
+
+#print(df.describe())
+#print('Is not null',df.isnull().sum())
+
+#to check another one data base
+df_walmart = pd.read_csv('Walmart.csv')
 
 # тут перетвории в формат дати зрозумілого для пайтон
 df['Date'] = pd.to_datetime(df['Date'], format = '%d-%m-%Y')
@@ -170,7 +176,7 @@ else:
     print('Invalid season name. Please enter one of the following: Winter, Summer, Autumn, Spring.')
 
 
-# в наступному блоці коду бдемо аналізувати які продукти продаються найкраще в якому сезоні
+# в наступному блоці коду будемо аналізувати які продукти продаються найкраще в якому сезоні
 #
 #
 
