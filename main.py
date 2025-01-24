@@ -25,6 +25,7 @@ df.to_csv('walmart_products.csv', index = False)
 df['SELLER'] = df['SELLER'].fillna('Unknown')
 df['BRAND'] = df['BRAND'].fillna('Unknown')
 
+print(df['SELLER'])
 #print(df.describe())
 #print('Is not null',df.isnull().sum())
 
@@ -177,19 +178,19 @@ else:
 
 
 # в наступному блоці коду будемо аналізувати які продукти продаються найкраще в якому сезоні
-#
-#
 
+# функція яка прийматиме сезон та виводить продукт який купували найбільше у певному сезоні, та кількість продукту який було продано
 
+max_product_sales = {}
 
+def max_season_sales(grouped_season):
+    for season, group in grouped_season:
+        max_sales = group.loc[group['Weekly_Sales'].idxmax()]
+        max_product_sales [season] = {
+            'Product Name': max_sales['PRODUCT_NAME'],
+            'Weekly Sales': max_sales['Weekly_Sales']
+        }
+    for season, product in max_product_sales.items():
+        print(f'In{season} season, the product with maximum sales is {product['Product Name']} with {product['Weekly Sales']} sales.')
 
-
-
-
-
-
-
-
-
-
-
+max_product_sales(grouped_season)
