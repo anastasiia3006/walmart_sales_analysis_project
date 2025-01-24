@@ -25,7 +25,6 @@ df.to_csv('walmart_products.csv', index = False)
 df['SELLER'] = df['SELLER'].fillna('Unknown')
 df['BRAND'] = df['BRAND'].fillna('Unknown')
 
-print(df['SELLER'])
 #print(df.describe())
 #print('Is not null',df.isnull().sum())
 
@@ -181,16 +180,66 @@ else:
 
 # функція яка прийматиме сезон та виводить продукт який купували найбільше у певному сезоні, та кількість продукту який було продано
 
-max_product_sales = {}
+max_sales_dict = {}
 
 def max_season_sales(grouped_season):
     for season, group in grouped_season:
         max_sales = group.loc[group['Weekly_Sales'].idxmax()]
-        max_product_sales [season] = {
+        max_sales_dict [season] = {
             'Product Name': max_sales['PRODUCT_NAME'],
             'Weekly Sales': max_sales['Weekly_Sales']
         }
-    for season, product in max_product_sales.items():
-        print(f'In{season} season, the product with maximum sales is {product['Product Name']} with {product['Weekly Sales']} sales.')
+    for season, product in max_sales_dict.items():
+        print(f'In {season} season, the product with maximum sales is {product['Product Name']} with {product['Weekly Sales']} sales in the week.')
 
-max_product_sales(grouped_season)
+max_season_sales(grouped_season)
+
+
+min_sales_dict = {}
+
+def min_season_sales(grouped_season):
+    for season, group in grouped_season:
+        min_sales = group.loc[group['Weekly_Sales'].idxmin()]
+        min_sales_dict [season] = {
+            'Product Name': min_sales['PRODUCT_NAME'],
+            'Weekly Sales': min_sales['Weekly_Sales']
+        }
+    for season, product in min_sales_dict.items():
+        print(f'In {season} season, the product with minimum sales is {product['Product Name']} with {product['Weekly Sales']} sales in the week.')
+
+min_season_sales(grouped_season)
+
+# + visualisation
+
+
+
+
+#  - які продукти найчастіше купують, які продукти цих брендів є складають високу частку продажів в магазинах: BRAND, Weekly_Sales, Store, product_name 
+#  - додати при вивиеді також бренд продуктів
+
+grouped_product = df.groupby('PRODUCT_NAME')['Weekly_Sales'].sum()
+
+def most_frequent_product(grouped_product):
+    best_selling_product = grouped_product.idxmax()
+    best_selling_sales = grouped_product.max()
+    best_selling_brand = df[df['PRODUCT_NAME'] == best_selling_product]['BRAND'].iloc[0]
+
+    print(f"The best selling product is: {best_selling_product}")
+    print(f"Brand: {best_selling_brand}")
+    print(f"Total Weekly Sales: {best_selling_sales}")
+
+most_frequent_product(grouped_product)
+print('***')
+
+# + visualisation
+
+
+
+# sorting products from those that are purchased the most to those that are not often in demand
+
+sorted_products = grouped_product.sort_values(ascending=False)
+print(sorted_products)
+
+# + visualisation
+
+print
