@@ -1,4 +1,5 @@
 
+from datetime import date
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
@@ -18,8 +19,10 @@ def z_test_two_samples(df, group_col, value_col, variable1, variable2, alpha=0.0
     Returns:
     - the result of the hypothesis: whether we reject the null hypothesis or not.
     """
-    
+ 
+
     # Розподіляємо дані на дві групи за медіаною
+
     median_value = df[group_col].median()
     low_group = df[df[group_col] <= median_value]
     high_group = df[df[group_col] > median_value]

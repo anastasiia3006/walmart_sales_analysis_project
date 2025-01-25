@@ -1,12 +1,8 @@
 
 import pandas as pd
 import numpy as np
-# import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-# from sklearn.model_selection import train_test_split
-# from sklearn.linear_model import LinearRegression
-# import datetime
 from scipy import stats
 from scipy.stats import ttest_ind
 
@@ -16,6 +12,7 @@ df = pd.read_excel('walmart_productts.xlsx')
 df.to_csv('walmart_products.csv', index = False)
 
 # check the data in table
+
 # print(df.head)
 # print(df.shape)
 # print(df.info())
@@ -23,16 +20,16 @@ df.to_csv('walmart_products.csv', index = False)
 # print(df.isnull().sum())
 # print(df.dtypes)
 
+
+# remove missing values
 df['SELLER'] = df['SELLER'].fillna('Unknown')
 df['BRAND'] = df['BRAND'].fillna('Unknown')
 
+# to check missing values
 #print(df.describe())
 #print('Is not null',df.isnull().sum())
 
-#to check another one data base
-df_walmart = pd.read_csv('Walmart.csv')
-
-# тут перетвории в формат дати зрозумілого для пайтон
+# convert date to date type in .py
 df['Date'] = pd.to_datetime(df['Date'], format = '%d-%m-%Y')
 
 def get_season(date):
@@ -46,9 +43,11 @@ def get_season(date):
     elif month in [9, 10, 11]:
         return 'Autumn'
 
-# тут додали нову колонку - сезони до таблиці
+# add new column to db
 season = ['Winter', 'Summer', 'Autumn', 'Spring']
 df['Season'] = df['Date'].apply(get_season)
+
+# update this in db
 df.to_csv('updated_walmart_products.csv', index=False)
 
 # тут створюємо медіану продажів для кожного сезону,
@@ -92,7 +91,7 @@ def check_for_holiday_flag(group, season_total_sales):
         holiday_share = holiday_total/season_total_sales
         increase_percentage = (holiday_total - season_total_sales)* 100
 
-        result = 'Holiday sales increase overall profits' if increase_percentage > 0 else 'Holiday sales have no impact on overall profits'
+        result = 'Holiday sales increase overall profits' if increase_percentage > 0 else 'Holiday sales did not boost profits'
 
         increase_percentage_round = round(increase_percentage, 2)
 
@@ -178,6 +177,9 @@ else:
     print('Invalid season name. Please enter one of the following: Winter, Summer, Autumn, Spring.')
 
 
+
+
+# 2
 # в наступному блоці коду будемо аналізувати які продукти продаються найкраще в якому сезоні
 # функція яка прийматиме сезон та виводить продукт який купували найбільше у певному сезоні, та кількість продукту який було продано
 
@@ -239,9 +241,20 @@ print('***')
 # sorting products from those that are purchased the most to those that are not often in demand
 
 sorted_products = grouped_product.sort_values(ascending=False)
-print(sorted_products)
+
+product_rank = {product: rank+1 for rank, product in enumerate(sorted_products.index)}
+
+df['Popular_products'] = df['PRODUCT_NAME'].apply(lambda x: product_rank.get(x, None))
+
+popular_product = df[df['Popular_products'] > df['Popular_products'].mean()]
+not_popular_product = df[df['Popular_products']<= df['Popular_products'].mean()]
+
+df['Popular_products'] = df['Popular_products'].apply(lambda x: 'Popular product' if x > df['Popular_products'].mean() else 'Not popular product')
+df['Popular_products'].fillna('Not popular product', inplace=True)
+
+print(df.to_string())
+df.to_csv('updated_walmart_products.csv', index=False)
+
 
 # + visualisation
-
-
 
