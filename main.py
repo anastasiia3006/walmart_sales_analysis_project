@@ -7,6 +7,7 @@ from matplotlib.ticker import FuncFormatter
 # from sklearn.model_selection import train_test_split
 # from sklearn.linear_model import LinearRegression
 # import datetime
+from scipy import stats
 from scipy.stats import ttest_ind
 
 #add db walmart with list of products
@@ -48,6 +49,7 @@ def get_season(date):
 # тут додали нову колонку - сезони до таблиці
 season = ['Winter', 'Summer', 'Autumn', 'Spring']
 df['Season'] = df['Date'].apply(get_season)
+df.to_csv('updated_walmart_products.csv', index=False)
 
 # тут створюємо медіану продажів для кожного сезону,
 # від неї будемо відштовхуватися і робити аналіз усіх продажів
@@ -177,7 +179,6 @@ else:
 
 
 # в наступному блоці коду будемо аналізувати які продукти продаються найкраще в якому сезоні
-
 # функція яка прийматиме сезон та виводить продукт який купували найбільше у певному сезоні, та кількість продукту який було продано
 
 max_sales_dict = {}
@@ -242,4 +243,5 @@ print(sorted_products)
 
 # + visualisation
 
-print
+
+
