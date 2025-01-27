@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats
 from func import z_test_two_samples
-import scipy
 
 df = pd.read_csv('updated_walmart_products.csv')
 
@@ -53,7 +52,7 @@ else:
 #3.2 - Does the temperature in the region affect sales?
 # use z-test 
 temp_sales_effect = z_test_two_samples(df, 'Temperature', 'Weekly_Sales', alpha = 0.05, variable1 = 'temperature', variable2 = 'sales')
-#print(temp_sales_effect)
+print(temp_sales_effect)
 
 
 

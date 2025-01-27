@@ -199,11 +199,11 @@ min_season_sales(grouped_season)
 max_sales_df = pd.DataFrame(max_sales_dict).T.reset_index()
 max_sales_df.columns = ['Season', 'Product Name', 'Weekly Sales']
 
-# Створюємо DataFrame з мінімальними продажами
+# Create DataFrame with minimal sales
 min_sales_df = pd.DataFrame(min_sales_dict).T.reset_index()
 min_sales_df.columns = ['Season', 'Product Name', 'Weekly Sales']
 
-# Зберігаємо дані в CSV файли
+# Save data to csv file
 max_sales_df.to_csv('max_season_sales.csv', index=False)
 min_sales_df.to_csv('min_season_sales.csv', index=False)
 
