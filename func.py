@@ -1,6 +1,4 @@
 
-from datetime import date
-import pandas as pd
 import numpy as np
 import scipy.stats as stats
 
@@ -21,34 +19,34 @@ def z_test_two_samples(df, group_col, value_col, variable1, variable2, alpha=0.0
     """
  
 
-    # Розподіляємо дані на дві групи за медіаною
+    # Distribution of data into two groups by median
 
     median_value = df[group_col].median()
     low_group = df[df[group_col] <= median_value]
     high_group = df[df[group_col] > median_value]
     
-    # Обчислюємо середні значення для кожної групи
+    # Calculate the average values ​​for each group
     mean_low = low_group[value_col].mean()
     mean_high = high_group[value_col].mean()
     
-    # Обчислюємо стандартні відхилення для кожної групи
+    # Calculating standard deviations for each group
     low_std = low_group[value_col].std()
     high_std = high_group[value_col].std()
     
-    # Розміри вибірок
+    # Sample sizes
     n_low = len(low_group)
     n_high = len(high_group)
     
-    # Обчислюємо Z-статистику
+    # Calculating the Z-statistic
     z_score = (mean_low - mean_high) / np.sqrt((low_std**2 / n_low) + (high_std**2 / n_high))
     
-    # Критичне значення Z для двостороннього тесту
-    z_critical = stats.norm.ppf(1 - alpha / 2)  # для двостороннього тесту ділимо alpha на 2
+    # Critical Z value for a two-tailed test
+    z_critical = stats.norm.ppf(1 - alpha / 2)  # for a two-tailed test, divide alpha by 2
     
-    # Обчислюємо p-value
-    p_value = 2 * (1 - stats.norm.cdf(abs(z_score)))  # двосторонній тест
+    # Calculating the p-value
+    p_value = 2 * (1 - stats.norm.cdf(abs(z_score)))  # two-tailed test
     
-    # Перевіряємо гіпотезу за критичним значенням Z
+    # Test the hypothesis using the critical value of Z
     print('Z-Score:', z_score)
     print('Critical Z-Score:', z_critical)
     print('P-value:', p_value)
