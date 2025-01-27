@@ -1,6 +1,14 @@
 # walmart_sales_analysis_project
 
 
+Business Impact and Strategic Decisions:
+
+   Inventory Planning: By analyzing which products sell best during certain seasons or economic conditions, Walmart can optimize its inventory levels, reducing stockouts and overstocks.
+   Pricing Strategies: Understanding the relationship between external factors (like temperature or unemployment) and sales can help Walmart adjust its pricing dynamically to remain competitive.
+   Marketing and Promotion: Insights into the popularity of products during holidays or specific seasons help Walmart design more effective advertising campaigns and promotional offers.
+   Customer Segmentation: By recognizing how different segments (e.g., regions with higher unemployment) behave, Walmart can tailor its product offerings and marketing efforts to better meet customer needs.
+
+
 all data base have a the same department of products(Skin Care) and same category (Face Masks)
 
 -----DESCTIPTION-OF-THE-DATABASE----
