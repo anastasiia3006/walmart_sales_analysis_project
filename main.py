@@ -50,10 +50,10 @@ df['Season'] = df['Date'].apply(get_season)
 # update this in db
 df.to_csv('updated_walmart_products.csv', index=False)
 
-# тут створюємо медіану продажів для кожного сезону,
-# від неї будемо відштовхуватися і робити аналіз усіх продажів
+# here we create a median of sales for each season,
+# we will start from it and analyze all sales
 
-#спочатку групуємо дані за значенням у cтовбці Season
+# first we group the data by the value in the Season column
 grouped_season = df.groupby('Season')
 
 for season, group in grouped_season:
@@ -76,9 +76,9 @@ for season, group in grouped_season:
     else:
         spring_total_sales = group['Weekly_Sales'].sum()
 
-# перевірка чи в сезоні є святкові дні
-# якщо є то яку частину прибутку вони становлять,
-# на скільки відсотків вони підвищують прибуток магазину
+# check if there are holidays in the season
+# if there are, what part of the profit do they make up,
+# by how much percent do they increase the store's profit
 
 def check_for_holiday_flag(group, season_total_sales):
     # Calculation of the share of holiday sales    
@@ -95,7 +95,7 @@ def check_for_holiday_flag(group, season_total_sales):
 
         increase_percentage_round = round(increase_percentage, 2)
 
-        # Виконання t-тесту
+        # Performing a t-test
         t_stat, p_value = (None, None)
         if not non_holiday_sales.empty:
             t_stat, p_value = ttest_ind(holiday_sales, non_holiday_sales, equal_var=False)
@@ -112,7 +112,7 @@ def check_for_holiday_flag(group, season_total_sales):
         return None
 
         
-# ініціалізуємо словник для збереження результатів
+# initialize the dictionary to store the results
 seasonal_holiday_sales = {}
 
 seasons = ['Winter', 'Summer', 'Autumn', 'Spring']
@@ -134,22 +134,10 @@ def to_check_the_season(season):
         else:
             print("- No holiday sales in this season.")
 
-#visualisation 
-
-# def plot_sales_by_season(season, total_sales):
-#     if total_sales>0:
-#         plt.figure(figsize= (12,6))
-#         plt.bar([season], [total_sales], color = 'b')
-#         plt.title(f'Sales in {season}')
-#         plt.xlabel('Season')
-#         plt.ylabel('Total Sales')
-#         plt.show()
-#     else:
-#         print(f'No sales data available for {season}.')
 
 season = input(str('Enter a season of the year ->   '))
 
-# Перевірка, чи введений сезон є в доступному списку
+# Check if the entered season is in the available list
 if season in seasonal_holiday_sales:
     analysis = seasonal_holiday_sales[season]
     total_sales = {
@@ -169,19 +157,15 @@ if season in seasonal_holiday_sales:
             print(f"- P-value: {analysis['p_value']}")
     else:
         print(f'- No holiday sales in the {season} season.')
-
-    #sales visualisation
-    #plot_sales_by_season(season, total_sales)
-
 else:
     print('Invalid season name. Please enter one of the following: Winter, Summer, Autumn, Spring.')
 
 
 
-
 # 2
-# в наступному блоці коду будемо аналізувати які продукти продаються найкраще в якому сезоні
-# функція яка прийматиме сезон та виводить продукт який купували найбільше у певному сезоні, та кількість продукту який було продано
+# in the next block of code we will analyze which products sell best in which season
+# a function that will take a season and output the product that was bought the most in
+# a certain season, and the amount of the product that was sold
 
 max_sales_dict = {}
 
@@ -212,13 +196,19 @@ def min_season_sales(grouped_season):
 
 min_season_sales(grouped_season)
 
-# + visualisation
+max_sales_df = pd.DataFrame(max_sales_dict).T.reset_index()
+max_sales_df.columns = ['Season', 'Product Name', 'Weekly Sales']
 
+# Створюємо DataFrame з мінімальними продажами
+min_sales_df = pd.DataFrame(min_sales_dict).T.reset_index()
+min_sales_df.columns = ['Season', 'Product Name', 'Weekly Sales']
 
+# Зберігаємо дані в CSV файли
+max_sales_df.to_csv('max_season_sales.csv', index=False)
+min_sales_df.to_csv('min_season_sales.csv', index=False)
 
-
-#  - які продукти найчастіше купують, які продукти цих брендів є складають високу частку продажів в магазинах: BRAND, Weekly_Sales, Store, product_name 
-#  - додати при вивиеді також бренд продуктів
+# - which products are most often purchased, which products of these brands account for a high share of sales in stores: BRAND, Weekly_Sales, Store, product_name
+# - add the product brand when selecting
 
 grouped_product = df.groupby('PRODUCT_NAME')['Weekly_Sales'].sum()
 
@@ -234,9 +224,6 @@ def most_frequent_product(grouped_product):
 most_frequent_product(grouped_product)
 print('***')
 
-# + visualisation
-
-
 
 # sorting products from those that are purchased the most to those that are not often in demand
 
@@ -250,11 +237,9 @@ popular_product = df[df['Popular_products'] > df['Popular_products'].mean()]
 not_popular_product = df[df['Popular_products']<= df['Popular_products'].mean()]
 
 df['Popular_products'] = df['Popular_products'].apply(lambda x: 'Popular product' if x > df['Popular_products'].mean() else 'Not popular product')
-df['Popular_products'].fillna('Not popular product', inplace=True)
+df['Popular_products'] = df['Popular_products'].fillna('Not popular product')
 
-print(df.to_string())
+#print(df.to_string())
 df.to_csv('updated_walmart_products.csv', index=False)
 
-
-# + visualisation
 

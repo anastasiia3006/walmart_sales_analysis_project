@@ -50,7 +50,7 @@ else:
 
 
 
-# 3.2 - Чи впливає температура в регіоні на продажі?
+#3.2 - Does the temperature in the region affect sales?
 # use z-test 
 temp_sales_effect = z_test_two_samples(df, 'Temperature', 'Weekly_Sales', alpha = 0.05, variable1 = 'temperature', variable2 = 'sales')
 #print(temp_sales_effect)
@@ -58,7 +58,7 @@ temp_sales_effect = z_test_two_samples(df, 'Temperature', 'Weekly_Sales', alpha 
 
 
 
-# 3.3 - Чи впливає сезон на продажі конкретного товару?
+#3.3 - Does the season affect the sales of a particular product?
 
 #ANOVA - test
 
